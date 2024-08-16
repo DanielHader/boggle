@@ -1,3 +1,5 @@
+
+// finds the shared prefix of strings s1 and s2
 fn shared_prefix<'a>(s1: &'a str, s2: &str) -> &'a str {
     let min_len: usize = std::cmp::min(s1.len(), s2.len());
     let ind = std::iter::zip(s1[0..min_len].chars(),s2[0..min_len].chars()).position(|(c1,c2)| c1 != c2 );
@@ -24,7 +26,6 @@ impl Node {
     }
 
     fn add_word(&mut self, word: &str) {
-
 	if word.len() == 0 { self.terminal = true; return; }
 
 	let mut found = false;
@@ -101,5 +102,9 @@ impl Trie {
     /// Adds a single word to the trie.
     pub fn add_word(&mut self, word: &str) {
 	self.root.add_word(word);
+    }
+
+    pub fn has_prefix(word: &str) {
+	
     }
 }
