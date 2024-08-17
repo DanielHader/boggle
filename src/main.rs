@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -12,23 +13,15 @@ where P: AsRef<Path> {
 
 fn main() {
 
-    if let Ok(lines) = read_lines("/usr/share/dict/words") {
+    let args: Vec<String> = env::args().collect();
+    let mut dict_filepath = env::args().nth(1).unwrap_or("/usr/share/dict/words".to_string());
 
-	for line in lines.take(10).flatten() {
-	    println!("{}", line);
-	}
+    let mut words = Vec::<String>::new();
+    if let Ok(lines) = read_lines(dict_filepath) {
+	words = lines.filter_map(|r| r.ok()).filter(|x| x.chars().all(|c| c.is_ascii_lowercase())).take(20).collect();
     }
+    let word_refs: Vec<&str> = words.iter().map(|s| &**s).collect();
     
-    let mut words = Vec::<&str>::new();
-    words.push("romane");
-    words.push("romanus");
-    words.push("romulus");
-    words.push("rubens");
-    words.push("ruber");
-    words.push("rubicon");
-    words.push("rubicundus");
-    
-    let trie = trie::Trie::from_words(&words);
-
+    let trie = trie::Trie::from_words(&word_refs);
     trie.print();
 }
